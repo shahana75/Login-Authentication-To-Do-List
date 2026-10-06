@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ username }} - SHAZAM</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background: radial-gradient(circle at 50% 50%, #0d1b2a, #020813);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      letter-spacing: 0.5px;
+      color: #e2e8f0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background-color: rgba(4, 12, 27, 0.7);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      text-align: center;
+      padding: 20px;
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      font-family: 'Playfair Display', serif;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+    }
+
+    .welcome {
+      text-align: center;
+      margin: 40px 0 10px 0;
+      font-size: 1.6rem;
+      font-family: 'Playfair Display', serif;
+      font-weight: 600;
+      color: #ffffff;
+    }
+
+    .main-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 40px;
+      max-width: 1200px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 30px 20px 50px;
+      flex-grow: 1;
+    }
+
+    @media (max-width: 900px) {
+      .main-layout {
+        grid-template-columns: 1fr;
+        gap: 30px;
+      }
+    }
+
+    .right-column {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+    }
+
+    .task_container, .incom_container, .com_container {
+      background: rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+      transition: border-color 0.3s ease;
+    }
+
+    .task_container:hover, .incom_container:hover, .com_container:hover {
+      border-color: rgba(255, 255, 255, 0.12);
+    }
+
+    .task_container h3, .incom_container h3, .com_container h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .task_container {
+      height: fit-content;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+    }
+
+    #taskInput {
+      width: 100%;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    #taskInput:focus {
+      outline: none;
+      border-color: #38bdf8;
+      background: rgba(255, 255, 255, 0.08);
+      box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25);
+    }
+
+    #addBt {
+      width: 100%;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      background: linear-gradient(135deg, #0284c7, #0369a1);
+      color: #ffffff;
+      padding: 12px;
+      border-radius: 8px;
+      border: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(3, 105, 161, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    #addBt:hover {
+      background: linear-gradient(135deg, #0369a1, #075985);
+      box-shadow: 0 6px 16px rgba(3, 105, 161, 0.3);
+      transform: translateY(-1px);
+    }
+
+    #addBt:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    ul {
+      list-style-type: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 12px 16px;
+      border-radius: 8px;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .task-item:hover {
+      background: rgba(255, 255, 255, 0.06);
+      transform: translateY(-2px);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .task-checkbox {
+      width: 18px;
+      height: 18px;
+      accent-color: #38bdf8;
+      cursor: pointer;
+    }
+
+    .task-details {
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      gap: 4px;
+    }
+
+    .task-text {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #f1f5f9;
+      font-size: 0.95rem;
+      line-height: 1.4;
+      transition: color 0.3s ease;
+    }
+
+    .task-item.completed .task-text {
+      text-decoration: line-through;
+      color: #64748b;
+    }
+
+    .task-time {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      color: #94a3b8;
+      font-size: 0.75rem;
+    }
+
+    .delete-btn {
+      background: none;
+      border: none;
+      color: #94a3b8;
+      cursor: pointer;
+      padding: 6px;
+      font-size: 1.1rem;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .delete-btn:hover {
+      color: #ef4444;
+      background: rgba(239, 68, 68, 0.1);
+    }
+
+    .logout-btn {
+      display: block;
+      margin: 20px auto 40px;
+      padding: 10px 24px;
+      background-color: rgba(239, 68, 68, 0.1);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .logout-btn:hover {
+      background-color: rgba(239, 68, 68, 0.25);
+      color: #ffffff;
+      border-color: rgba(239, 68, 68, 0.4);
+      transform: translateY(-1px);
+    }
+
+    footer {
+      background-color: #020813;
+      text-align: center;
+      padding: 24px;
+      font-size: 0.85rem;
+      color: #64748b;
+      margin-top: auto;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+    }
+  </style>
+</head>
+<body>
+  <header>SHAZAM</header>
+
+  <p class="welcome">Welcome, {{ username }}</p>
+
+  <div class="main-layout">
+    <div class="task_container">
+      <h3>Enter your tasks</h3>
+      <input type="text" id="taskInput" placeholder="Enter task - description">
+      <button type="button" id="addBt" class="add">Add</button>
+    </div>
+
+    <div class="right-column">
+      <div class="incom_container">
+        <h3>Incomplete tasks</h3>
+        <ul id="incompleteTasks"></ul>
+      </div>
+      
+      <div class="com_container">
+        <h3>Completed tasks</h3>
+        <ul id="completedTasks"></ul>
+      </div>
+    </div>
+  </div>
+
+  <form action="/logout" method="post">
+    <button type="submit" class="logout-btn">Log out</button>
+  </form>
+
+  <footer>created by Shahana</footer>
+
+  <script src="{{ url_for('static', filename='notes.js') }}"></script>
+</body>
+</html>
